@@ -42,9 +42,9 @@
     function TrainingDay(moment) {
         this.moment = moment;
         this.sessions = [
-            new TrainingSession("swim",1500,60*25,"1500N")
-            , new TrainingSession("bike",60*1000,60*120,"2H")
-            , new TrainingSession("run",10*1000,60*50,"50' CCL")
+            new TrainingSession("swim",Math.floor((Math.random() * 3000) + 1),60*Math.floor((Math.random() * 40) + 1),"1500N")
+            , new TrainingSession("bike",Math.floor((Math.random() * 100) + 1)*1000,60*Math.floor((Math.random() * 180) + 1),"2H")
+            , new TrainingSession("run",Math.floor((Math.random() * 18) + 1)*1000,60*Math.floor((Math.random() * 90) + 1),"50' CCL")
             , new TrainingSession("other",0,60*30,"4x8 Fuerza")
             ];
     }
