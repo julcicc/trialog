@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Trialog</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="trialog.css">
+
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.0.5/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script>html5.addElements('todo')</script>
+    <![endif]-->
+
+  </head>
+
+  <body>
+
+    <trialog></trialog>
+
+    <script src="trialog.tag" type="riot/tag"></script>
+    <script src="//rawgit.com/riot/riot/master/riot%2Bcompiler.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+
+    <script>
+
+    function TrainingSession(type, distance, duration, txt) {
+        this.type = type;
+        this.distance = distance;
+        this.duration = duration;
+        this.txt = txt;
+    }
+
+    function TrainingDay(moment) {
+        this.moment = moment;
+        this.sessions = [
+            new TrainingSession("swim",1500,60*25,"1500N")
+            , new TrainingSession("bike",60*1000,60*120,"2H")
+            , new TrainingSession("run",10*1000,60*50,"50' CCL")
+            , new TrainingSession("other",0,60*30,"4x8 Fuerza")
+            ];
+    }
+
+    var main = riot.observable();
+    main._currentMoment = moment();
+    main.getMoment = function() {
+        return main._currentMoment.clone();
+    }
+
+    main.setMoment = function( newMoment ) {
+        main._currentMoment = newMoment;
+        main.trigger('momentChanged');
+    }
+
+    main.getDays = function() { 
+        var startMoment = main._currentMoment.day(1);
+        var result = [ new TrainingDay(startMoment) ]
+        for (var i = 1; i < 7; i++ ) {
+            result.push( new TrainingDay(startMoment.clone().add(i,'days')) );
+        }
+        return result;
+    };
+
+    riot.mount('trialog', main );
+
+    </script>
+
+  </body>
+
+</html>
