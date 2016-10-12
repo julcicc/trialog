@@ -1,3 +1,7 @@
+body {
+    padding: 2px 2px 2px 2px;
+}
+
 .swim_d {
     color: blue;
 }
@@ -14,12 +18,17 @@
     color: red;
 }
 
+
 @media (min-width: 768px){
   .seven-cols .col-md-1,
   .seven-cols .col-sm-1,
   .seven-cols .col-lg-1  {
     width: 100%;
     *width: 100%;
+  }
+  .swim_icon, .bike_icon, .run_icon {
+      width:15px;
+      height:15px;
   }
 }
 
@@ -29,6 +38,10 @@
   .seven-cols .col-lg-1 {
     width: 14.285714285714285714285714285714%;
     *width: 14.285714285714285714285714285714%;
+  }
+  .swim_icon, .bike_icon, .run_icon {
+      width:20px;
+      height:20px;
   }
 }
 
@@ -42,5 +55,9 @@
   .seven-cols .col-lg-1 {
     width: 14.285714285714285714285714285714%;
     *width: 14.285714285714285714285714285714%;
+  }
+  .swim_icon, .bike_icon, .run_icon {
+      width:25px;
+      height:25px;
   }
 }

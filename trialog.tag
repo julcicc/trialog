@@ -12,34 +12,33 @@
         </div>>
     </div>
     <div class="row">
+        <div class="col-md-2">
+                <h4>Total</h4>
+                XX YY
+                ZZ
+        </div>
         <div class="col-md-10">
         <div class="row seven-cols">
             <div class="col-md-1" each={ days }>
             <h5> { moment.format("dd DD MMM") } </h5>
                 <div class="swim_d" each={ sessions.filter(showSwim) }>
-                Swim:
+                <img src="img/swim_ico.png" class="swim_icon">
                 { txt }
                 </div>
                 <div class="bike_d" each={ sessions.filter(showBike) }>
-                Bike:
+                <img src="img/bike_ico.png" class="bike_icon">
                 { txt }
                 </div>
                 <div class="run_d" each={ sessions.filter(showRun) }>
-                Run:
+                <img src="img/run_ico.png" class="run_icon">
                 { txt }
                 </div>
                 <div class="other_d" each={ sessions.filter(showOther) } >
-                Other:
                 { txt }
                 </div>
             </div>
         </div>
 
-        </div>
-        <div class="col-md-2">
-                <h4>Total</h4>
-                XX YY
-                ZZ
         </div>
     </div>
 
