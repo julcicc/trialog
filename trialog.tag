@@ -1,37 +1,45 @@
 <trialog>
 
     <div class="row">
-        <div class="col-sm-1">
-            <button class="btn btn-default" onclick={prevWeek}>
+        <div class="col-md-12">
+        <input type="date" value={ opts.getMoment().format("YYYY-MM-DD") } onChange={changeDate}>
+            <button class="btn btn-default btn-md" onclick={prevWeek}>
                 <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
             </button>
-        </div>
-        <div class="col-sm-1 panel panel-default " each={ days }>
-        <h5> { moment.format("dd DD/YY") } </h5>
-            <div class="swim_d" each={ sessions.filter(showSwim) }>
-            Swim:
-            { txt }
-            </div>
-            <div class="bike_d" each={ sessions.filter(showBike) }>
-            Bike:
-            { txt }
-            </div>
-            <div class="run_d" each={ sessions.filter(showRun) }>
-            Run:
-            { txt }
-            </div>
-            <div class="other_d" each={ sessions.filter(showOther) } >
-            Other:
-            { txt }
-            </div>
-        </div>
-        <div class="col-sm-3">
-        <h4>Total</h4>
-        </div>
-        <div class="col-sm-1">
-            <button class="btn btn-default" onclick={nextWeek}>
+            <button class="btn btn-default btn-md" onclick={nextWeek}>
                 <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
             </button>
+        </div>>
+    </div>
+    <div class="row">
+        <div class="col-md-10">
+        <div class="row seven-cols">
+            <div class="col-md-1" each={ days }>
+            <h5> { moment.format("dd DD MMM") } </h5>
+                <div class="swim_d" each={ sessions.filter(showSwim) }>
+                Swim:
+                { txt }
+                </div>
+                <div class="bike_d" each={ sessions.filter(showBike) }>
+                Bike:
+                { txt }
+                </div>
+                <div class="run_d" each={ sessions.filter(showRun) }>
+                Run:
+                { txt }
+                </div>
+                <div class="other_d" each={ sessions.filter(showOther) } >
+                Other:
+                { txt }
+                </div>
+            </div>
+        </div>
+
+        </div>
+        <div class="col-md-2">
+                <h4>Total</h4>
+                XX YY
+                ZZ
         </div>
     </div>
 
@@ -45,7 +53,13 @@
 
   <!-- this script tag is optional -->
   <script>
-    this.days = opts.getDays();
+
+	var self = this;
+	repaintLog() {
+    	this.days = opts.getDays();
+		this.currentDate = opts.getMoment();
+	}
+	this.repaintLog();
 
     nextWeek(e) {
         opts.setMoment(opts.getMoment().add(1,'week'));
@@ -55,8 +69,11 @@
 
     prevWeek(e) {
         opts.setMoment(opts.getMoment().subtract(1,'week'));
-        this.days = opts.getDays();
     }
+
+	changeDate(e) {
+		if (e.target.value!="") opts.setMoment( moment(e.target.value) );
+	}
 
     showSwim( item ) {
         return item.type == "swim";
@@ -72,6 +89,11 @@
         && item.type != "bike"
         && item.type != "run";
     }
+
+	opts.on('momentChanged', function() {
+		top.console.log("moment changed");
+		self.repaintLog();
+	} );
 
     edit(e) {
       this.text = e.target.value
