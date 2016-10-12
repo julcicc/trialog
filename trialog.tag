@@ -14,9 +14,41 @@
     <div class="row">
         <div class="col-md-2">
                 <h4>Total</h4>
-                XX YY
-                ZZ
-        </div>
+                <table class="table table-condensed">
+                <tr>
+                    <td><strong>{ durationAsString(totals.global.totalTime) }</strong></td>
+                    <td><span class="text-muted">{ durationAsString(totals.global.plannedTime) }</span></td>
+                </tr>
+                <tr>
+                    <td><strong>{ distanceAsString(totals.global.totalDistance) }</strong></td>
+                    <td><span class="text-muted">{ distanceAsString(totals.global.plannedDistance)}</span></td>
+                </tr>
+                <tr>
+                    <td><small class="swim_txt">{ durationAsString(totals.swim.totalTime) }</small></td>
+                    <td><small><span class="text-muted">{ durationAsString(totals.swim.plannedTime) }</span></small></td>
+                </tr>
+                <tr>
+                    <td><small class="swim_txt">{ totals.swim.totalDistance }m </small></td>
+                    <td><small><span class="text-muted">{ distanceAsString(totals.swim.plannedDistance ) }</span></small></td>
+                </tr>
+                <tr>
+                    <td><small class="bike_txt">{ durationAsString(totals.bike.totalTime) }</small></td>
+                    <td><small><span class="text-muted">{ durationAsString(totals.bike.plannedTime) }</span></small></td>
+                </tr>
+                <tr>
+                    <td><small class="bike_txt">{ distanceAsString(totals.bike.totalDistance) }</small></td>
+                    <td><small><span class="text-muted">{ distanceAsString(totals.bike.plannedDistance ) }</span></small></td>
+                </tr>
+                <tr>
+                    <td><small class="run_txt">{ durationAsString(totals.run.totalTime) }</small></td>
+                    <td><small><span class="text-muted">{ durationAsString(totals.run.plannedTime) }</span></small></td>
+                </tr>
+                <tr>
+                    <td><small class="run_txt">{ distanceAsString(totals.run.totalDistance) }</small></td>
+                    <td><small><span class="text-muted">{ distanceAsString(totals.run.plannedDistance ) }</span></small></td>
+                </tr>
+                </table>
+         </div>
         <div class="col-md-10">
         <div class="row seven-cols">
             <div class="col-md-1" each={ days }>
@@ -54,11 +86,24 @@
   <script>
 
 	var self = this;
+
+    distanceAsString(meters) {
+        return "" + (meters/1000).toFixed(2) + "km";
+    }
+
+    durationAsString(seconds) {
+        var d = moment.duration(seconds*1000);
+        var hrs = d.asHours();
+        var str = "" + Math.floor(hrs) + "h";
+        str += " " + Math.round((hrs-Math.floor(hrs))*60) + "m";
+        return str;
+    }
+
 	repaintLog() {
     	this.days = opts.getDays();
 		this.currentDate = opts.getMoment();
+        this.totals = opts.getWeeklyTotals();
 	}
-	this.repaintLog();
 
     nextWeek(e) {
         opts.setMoment(opts.getMoment().add(1,'week'));
@@ -89,11 +134,7 @@
         && item.type != "run";
     }
 
-	opts.on('momentChanged', function() {
-		top.console.log("moment changed");
-		self.repaintLog();
-	} );
-
+    /*
     edit(e) {
       this.text = e.target.value
     }
@@ -125,6 +166,14 @@
       item.done = !item.done
       return true
     }
+    */
+
+	opts.on('momentChanged', function() {
+		top.console.log("moment changed");
+		self.repaintLog();
+	} );
+
+	this.repaintLog();
 
   </script>
 

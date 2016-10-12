@@ -24,10 +24,18 @@
 
     <script>
 
-    function TrainingSession(type, distance, duration, txt) {
+    function TrainingSession(type, distance, duration, txt, plannedDistance, plannedDuration) {
         this.type = type;
+
+        if (!plannedDistance) plannedDistance = 0;
+        if (!plannedDuration) plannedDuration = 0;
+        if (!distance) distance = 0;
+        if (!duration) duration = 0;
+
         this.distance = distance;
         this.duration = duration;
+        this.plannedDistance = plannedDistance;
+        this.plannedDuration = plannedDuration;
         this.txt = txt;
     }
 
@@ -41,24 +49,61 @@
             ];
     }
 
+    function TrainingSummary() {
+        this.totalTime = 0;
+        this.totalDistance = 0;
+        this.plannedTime = 0;
+        this.plannedDistance = 0;
+    }
+
     var main = riot.observable();
     main._currentMoment = moment();
+    main._days = null;
+
+    main.getWeeklyTotals = function() {
+        var days = main.getDays();
+        var result = { "global" : new TrainingSummary()
+                    , "swim" : new TrainingSummary()
+                    , "bike" : new TrainingSummary()
+                    , "run" : new TrainingSummary() }
+        for (var i = 0; i < days.length; i++ ) {
+            for ( var j = 0; j < days[i].sessions.length; j++ ) {
+                var session = days[i].sessions[j];
+                result.global.totalTime += session.duration;
+                result.global.totalDistance += session.distance;
+                result.global.plannedTime += session.plannedDuration;
+                result.global.plannedDistance += session.plannedDistance;
+                if (session.type=="swim" || session.type=="bike" || session.type=="run" ) {
+                    result[ session.type ].totalTime += session.duration;
+                    result[ session.type ].totalDistance += session.distance;
+                    result[ session.type ].plannedTime += session.plannedDuration;
+                    result[ session.type ].plannedDistance += session.plannedDistance;
+                }
+            }
+        }
+        return result;
+    }
+
     main.getMoment = function() {
         return main._currentMoment.clone();
     }
 
     main.setMoment = function( newMoment ) {
         main._currentMoment = newMoment;
+        main._days = null; //XXX
         main.trigger('momentChanged');
     }
 
     main.getDays = function() { 
-        var startMoment = main._currentMoment.day(1);
-        var result = [ new TrainingDay(startMoment) ]
-        for (var i = 1; i < 7; i++ ) {
-            result.push( new TrainingDay(startMoment.clone().add(i,'days')) );
+        if (main._days == null) {
+            var startMoment = main._currentMoment.day(1);
+            var result = [ new TrainingDay(startMoment) ]
+            for (var i = 1; i < 7; i++ ) {
+                result.push( new TrainingDay(startMoment.clone().add(i,'days')) );
+            }
+            main._days = result;
         }
-        return result;
+        return main._days;
     };
 
     riot.mount('trialog', main );

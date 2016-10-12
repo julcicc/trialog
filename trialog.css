@@ -2,15 +2,15 @@ body {
     padding: 2px 2px 2px 2px;
 }
 
-.swim_d {
+.swim_d, .swim_txt {
     color: blue;
 }
 
-.bike_d {
+.bike_d, .bike_txt {
     color: black;
 }
 
-.run_d {
+.run_d, .run_txt {
     color: green;
 }
 
@@ -27,9 +27,10 @@ body {
     *width: 100%;
   }
   .swim_icon, .bike_icon, .run_icon {
-      width:15px;
-      height:15px;
+      width:40px;
+      height:40px;
   }
+  body{ font-size: 18px; }
 }
 
 @media (min-width: 992px) {
@@ -40,9 +41,10 @@ body {
     *width: 14.285714285714285714285714285714%;
   }
   .swim_icon, .bike_icon, .run_icon {
-      width:20px;
-      height:20px;
+      width:40px;
+      height:40px;
   }
+  body{ font-size: 18px; }
 }
 
 /**
@@ -60,4 +62,5 @@ body {
       width:25px;
       height:25px;
   }
+  body{ font-size: 16px; }
 }
