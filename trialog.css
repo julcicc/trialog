@@ -1,5 +1,16 @@
 body {
-    padding: 2px 2px 2px 2px;
+    margin: 0;
+    padding: 0;
+    font-family: "Open Sans", serif;
+}
+
+.ui.menu .item {
+    font-weight: 300;
+    font-size: 0.9rem;
+}
+
+.column.starter {
+    padding: 40px 15px;
 }
 
 .swim_d, .swim_txt {
@@ -18,49 +29,8 @@ body {
     color: red;
 }
 
-
-@media (min-width: 768px){
-  .seven-cols .col-md-1,
-  .seven-cols .col-sm-1,
-  .seven-cols .col-lg-1  {
-    width: 100%;
-    *width: 100%;
-  }
-  .swim_icon, .bike_icon, .run_icon {
-      width:40px;
-      height:40px;
-  }
-  body{ font-size: 18px; }
+.swim_icon, .bike_icon, .run_icon {
+    width:1em;
+    height:1em;
 }
 
-@media (min-width: 992px) {
-  .seven-cols .col-md-1,
-  .seven-cols .col-sm-1,
-  .seven-cols .col-lg-1 {
-    width: 14.285714285714285714285714285714%;
-    *width: 14.285714285714285714285714285714%;
-  }
-  .swim_icon, .bike_icon, .run_icon {
-      width:40px;
-      height:40px;
-  }
-  body{ font-size: 18px; }
-}
-
-/**
- *  The following is not really needed in this case
- *  Only to demonstrate the usage of @media for large screens
- */    
-@media (min-width: 1200px) {
-  .seven-cols .col-md-1,
-  .seven-cols .col-sm-1,
-  .seven-cols .col-lg-1 {
-    width: 14.285714285714285714285714285714%;
-    *width: 14.285714285714285714285714285714%;
-  }
-  .swim_icon, .bike_icon, .run_icon {
-      width:25px;
-      height:25px;
-  }
-  body{ font-size: 16px; }
-}

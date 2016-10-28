@@ -1,30 +1,46 @@
 <!doctype html>
-<html>
-  <head>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
     <title>Trialog</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="trialog.css">
+    <meta name="description" content="">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
 
-    <!--[if lt IE 9]>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.0.5/es5-shim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script>html5.addElements('todo')</script>
-    <![endif]-->
 
-  </head>
+    <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700,300&subset=latin' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" href="trialog.css">
+ </head>
 
   <body>
 
-    <trialog></trialog>
+   <nav class="ui fixed menu inverted navbar">
+        <a href="#home" class="brand item">Trialog</a>
+        <a href="javascript:main.prevWeek()" class="item">&lt; Prev</a>
+        <a href="javascript:main.nextWeek()" class="item">Next &gt;</a>
+    </nav> <!-- end nav -->
+    <main class="ui page grid">
+        <div class="row">
+            <div class="aligned starter column">
+            <sessiondetail></sessiondetail>
+            <trialog></trialog>
+            </div>
+        </div>
+    </main>
 
+    <script src="jquery.js"></script>
+    <script src="semantic/dist/semantic.min.js"></script>
     <script src="trialog.tag" type="riot/tag"></script>
+    <script src="sessiondetail.tag" type="riot/tag"></script>
     <script src="//rawgit.com/riot/riot/master/riot%2Bcompiler.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
 
     <script>
 
     function TrainingSession(type, distance, duration, txt, plannedDistance, plannedDuration) {
+        this.id = Math.random()
         this.type = type;
 
         if (!plannedDistance) plannedDistance = 0;
@@ -94,6 +110,18 @@
         main.trigger('momentChanged');
     }
 
+    main.today = function() {
+        this.setMoment( moment() );
+    }
+
+    main.nextWeek = function() {
+        this.setMoment(this.getMoment().add(1,'week'));
+    }
+
+    main.prevWeek = function() {
+        this.setMoment(this.getMoment().subtract(1,'week'));
+    }
+
     main.getDays = function() { 
         if (main._days == null) {
             var startMoment = main._currentMoment.day(1);
@@ -106,7 +134,13 @@
         return main._days;
     };
 
-    riot.mount('trialog', main );
+	var detailTag = null;
+    riot.compile(function() {
+       // riot.route.base('/~julian/trialog/')
+       riot.mount('trialog', main)
+       detailTag = riot.mount('sessiondetail');
+       riot.route.start(true)
+    });
 
     </script>
 

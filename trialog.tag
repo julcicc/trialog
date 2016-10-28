@@ -1,5 +1,6 @@
 <trialog>
 
+    <!--
     <div class="row">
         <div class="col-md-12">
         <input type="date" value={ opts.getMoment().format("YYYY-MM-DD") } onChange={changeDate}>
@@ -11,66 +12,35 @@
             </button>
         </div>>
     </div>
-    <div class="row">
-        <div class="col-md-2">
-                <h4>Total</h4>
-                <table class="table table-condensed">
-                <tr>
-                    <td><strong>{ durationAsString(totals.global.totalTime) }</strong></td>
-                    <td><span class="text-muted">{ durationAsString(totals.global.plannedTime) }</span></td>
-                </tr>
-                <tr>
-                    <td><strong>{ distanceAsString(totals.global.totalDistance) }</strong></td>
-                    <td><span class="text-muted">{ distanceAsString(totals.global.plannedDistance)}</span></td>
-                </tr>
-                <tr>
-                    <td><small class="swim_txt">{ durationAsString(totals.swim.totalTime) }</small></td>
-                    <td><small><span class="text-muted">{ durationAsString(totals.swim.plannedTime) }</span></small></td>
-                </tr>
-                <tr>
-                    <td><small class="swim_txt">{ totals.swim.totalDistance }m </small></td>
-                    <td><small><span class="text-muted">{ distanceAsString(totals.swim.plannedDistance ) }</span></small></td>
-                </tr>
-                <tr>
-                    <td><small class="bike_txt">{ durationAsString(totals.bike.totalTime) }</small></td>
-                    <td><small><span class="text-muted">{ durationAsString(totals.bike.plannedTime) }</span></small></td>
-                </tr>
-                <tr>
-                    <td><small class="bike_txt">{ distanceAsString(totals.bike.totalDistance) }</small></td>
-                    <td><small><span class="text-muted">{ distanceAsString(totals.bike.plannedDistance ) }</span></small></td>
-                </tr>
-                <tr>
-                    <td><small class="run_txt">{ durationAsString(totals.run.totalTime) }</small></td>
-                    <td><small><span class="text-muted">{ durationAsString(totals.run.plannedTime) }</span></small></td>
-                </tr>
-                <tr>
-                    <td><small class="run_txt">{ distanceAsString(totals.run.totalDistance) }</small></td>
-                    <td><small><span class="text-muted">{ distanceAsString(totals.run.plannedDistance ) }</span></small></td>
-                </tr>
-                </table>
-         </div>
-        <div class="col-md-10">
-        <div class="row seven-cols">
-            <div class="col-md-1" each={ days }>
-            <h5> { moment.format("dd DD MMM") } </h5>
-                <div class="swim_d" each={ sessions.filter(showSwim) }>
-                <img src="img/swim_ico.png" class="swim_icon">
-                { txt }
-                </div>
-                <div class="bike_d" each={ sessions.filter(showBike) }>
-                <img src="img/bike_ico.png" class="bike_icon">
-                { txt }
-                </div>
-                <div class="run_d" each={ sessions.filter(showRun) }>
-                <img src="img/run_ico.png" class="run_icon">
-                { txt }
-                </div>
-                <div class="other_d" each={ sessions.filter(showOther) } >
-                { txt }
+    -->
+
+    <div class="ui eight doubling cards">
+
+            <div class="card" each={ days }>
+                <div class="content">
+                    <div class="header">{ moment.format("dd DD MMM") } </div>
+                    <div class="description">
+                        <a class="ui label blue" each={ sessions.filter(showSwim) } href="#sessions/{ id }"> { txt }</a>
+                        <a class="ui label black" each={ sessions.filter(showBike) } href="#sessions/{ id }"> { txt }</a>
+                        <a class="ui label green" each={ sessions.filter(showRun) } href="#sessions/{ id }"> { txt }</a>
+                        <a class="ui label red" each={ sessions.filter(showOther) } href="#sessions/{ id }"> { txt }</a>
+                    </div>
                 </div>
             </div>
-        </div>
 
+            <div class="card raised black">
+                <div class="content">
+                    <div class="header">{ durationAsString(totals.global.totalTime) }</div>
+                    <div class="meta">{ durationAsString(totals.global.plannedTime) }</div>
+                    <div class="description">
+                        <a class="ui tag label blue " data-content={ durationAsString(totals.swim.plannedTime) }>{ durationAsString(totals.swim.totalTime) }</a>
+                        <a class="ui tag label black" data-content={ durationAsString(totals.bike.plannedTime) }>{ durationAsString(totals.bike.totalTime) }</a>
+                        <a class="ui tag label green" data-content={ durationAsString(totals.run.plannedTime) }>{ durationAsString(totals.run.totalTime) }</a>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <!--
         </div>
     </div>
 
@@ -81,11 +51,47 @@
     <button disabled={ items.filter(onlyDone).length == 0 } onclick={ removeAllDone }>
     X{ items.filter(onlyDone).length } </button>
   </form>
+    -->
 
   <!-- this script tag is optional -->
   <script>
 
 	var self = this;
+
+    var r = riot.route.create()
+
+    r('/home', home);
+    r('/sessions/*', popupDetail);
+
+
+    function lookupSession(days, id) {
+        for (var i = 0; i < days.length; i++) {
+            for( var j = 0; j < days[i].sessions.length; j++ ) {
+                if (days[i].sessions[j].id == id) return days[i].sessions[j];
+            }
+        }
+        return {}
+    }
+
+	function home() {
+	}	
+
+    function popupDetail( item ) {
+        var selected = lookupSession(self.days, item);
+        /**
+        top.console.log("DETAIL");
+        
+        top.console.log(item);
+        top.console.log(selected);
+        **/
+		
+		detailTag.update(selected);
+        $('.ui.modal').modal({
+    		onHide: function() {
+      			document.location='#';
+    		}
+  		}).modal('show');
+    }
 
     distanceAsString(meters) {
         return "" + (meters/1000).toFixed(2) + "km";
@@ -100,9 +106,12 @@
     }
 
 	repaintLog() {
+        top.console.log("Repainting... ");
     	this.days = opts.getDays();
+        top.console.log(this.days);
 		this.currentDate = opts.getMoment();
         this.totals = opts.getWeeklyTotals();
+        this.update();
 	}
 
     nextWeek(e) {
@@ -172,6 +181,7 @@
 		top.console.log("moment changed");
 		self.repaintLog();
 	} );
+
 
 	this.repaintLog();
 
